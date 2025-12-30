@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneHub - Premium Smartphones</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .cart-sidebar.active {
+            transform: translateX(0);
+        }
+        
+        .checkout-modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .checkout-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .wish-btn.active {
+            color: #ef4444;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .brand-logo {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        .brand-logo:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
+        .active-category {
+            background-color: #7c3aed !important;
+            color: white !important;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-name {
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+        
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fade-out-down {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+        
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes heart-fill {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out;
+        }
+        
+        .animate-fade-out-down {
+            animation: fade-out-down 0.3s ease-out;
+        }
+        
+        .animate-heart-beat {
+            animation: heart-beat 0.5s ease-out;
+        }
+        
+        .animate-heart-fill {
+            animation: heart-fill 0.3s ease-out;
+        }
+        
+        /* Improved image styling */
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .product-image {
+            transition: transform 0.5s ease;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-detail-image-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-detail-image {
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+        
+        /* Cart item image styling */
+        .cart-item-image-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-image {
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+        
+        /* Better product card layout */
+        .product-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-info {
+            flex-grow: 1;
+        }
+        
+        /* Glass effect for selected color */
+        .color-option.selected::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+        
+        /* Gradient backgrounds for different phone colors */
+        .phone-bg-space-black { background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%); }
+        .phone-bg-silver { background: linear-gradient(135deg, #bdc3c7 0%, #ecf0f1 100%); }
+        .phone-bg-gold { background: linear-gradient(135deg, #f9d89c 0%, #f5b041 100%); }
+        .phone-bg-deep-purple { background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); }
+        .phone-bg-phantom-black { background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); }
+        .phone-bg-cream { background: linear-gradient(135deg, #fef9e7 0%, #f7dc6f 100%); }
+        .phone-bg-green { background: linear-gradient(135deg, #27ae60 0%, #229954 100%); }
+        .phone-bg-lavender { background: linear-gradient(135deg, #bb8fce 0%, #9b59b6 100%); }
+        .phone-bg-obsidian { background: linear-gradient(135deg, #17202a 0%, #1b2631 100%); }
+        .phone-bg-snow { background: linear-gradient(135deg, #fbfcfc 0%, #f2f3f4 100%); }
+        .phone-bg-hazel { background: linear-gradient(135deg, #8b7355 0%, #6e5c43 100%); }
+        .phone-bg-default { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+        
+        /* Wishlist modal styling */
+        .wishlist-modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .wishlist-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Empty wishlist state */
+        .empty-wishlist {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+            color: #9ca3af;
+        }
+        
+        .empty-wishlist i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        /* Wishlist item styling */
+        .wishlist-item {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .wishlist-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .wishlist-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Heart button animation */
+        .heart-animation {
+            position: relative;
+        }
+        
+        .heart-pulse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: currentColor;
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .heart-pulse.active {
+            animation: heart-fill 0.4s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <i class="fas fa-mobile-alt text-2xl text-purple-600 mr-2"></i>
+                    <a href="index.html" class="text-2xl font-bold text-gray-800">Phone<span class="text-purple-600">Hub</span></a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 font-medium">Home</a>
+                    <a href="products.html" class="text-gray-700 hover:text-purple-600 font-medium">Products</a>
+                    <a href="brands.html" class="text-gray-700 hover:text-purple-600 font-medium">Brands</a>
+                    <a href="about.html" class="text-gray-700 hover:text-purple-600 font-medium">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-purple-600 font-medium">Contact</a>
+                </div>
+                
+                <!-- Cart and Wishlist Icons -->
+                <div class="flex items-center space-x-6">
+                    <button id="wishlist-btn" class="relative text-gray-700 hover:text-red-500 transition-all duration-300">
+                        <div class="heart-animation">
+                            <i class="fas fa-heart text-xl"></i>
+                            <div class="heart-pulse"></div>
+                        </div>
+                        <span id="wishlist-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    
+                    <button id="cart-btn" class="relative text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 font-medium">Home</a>
+                    <a href="products.html" class="text-gray-700 hover:text-purple-600 font-medium">Products</a>
+                    <a href="brands.html" class="text-gray-700 hover:text-purple-600 font-medium">Brands</a>
+                    <a href="about.html" class="text-gray-700 hover:text-purple-600 font-medium">About</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-purple-600 font-medium">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Latest Smartphones at Best Prices</h1>
+                    <p class="text-xl mb-8 opacity-90">Discover the newest models from top brands with exclusive deals and discounts. Free shipping on all orders!</p>
+                    <a href="products.html" class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 inline-block">Shop Now</a>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Smartphones" class="rounded-lg shadow-2xl max-w-md w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Featured Products</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Check out our latest collection of premium smartphones from top brands.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" id="featured-products">
+                <!-- Featured products will be loaded here -->
+            </div>
+            
+            <div class="text-center">
+                <a href="products.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                    View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Why Choose PhoneHub</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 rounded-xl bg-white hover:shadow-lg transition duration-300">
+                    <div class="bg-purple-100 text-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shipping-fast text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Free Shipping</h3>
+                    <p class="text-gray-600">Free delivery on all orders over $300. Fast and reliable shipping to your doorstep.</p>
+                </div>
+                
+                <div class="text-center p-6 rounded-xl bg-white hover:shadow-lg transition duration-300">
+                    <div class="bg-purple-100 text-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-undo-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">30-Day Returns</h3>
+                    <p class="text-gray-600">Not satisfied? Return your product within 30 days for a full refund.</p>
+                </div>
+                
+                <div class="text-center p-6 rounded-xl bg-white hover:shadow-lg transition duration-300">
+                    <div class="bg-purple-100 text-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">24/7 Support</h3>
+                    <p class="text-gray-600">Our customer support team is available round the clock to assist you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands Preview Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Top Brands</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Apple_logo_%282017%29.svg/1024px-Apple_logo_%282017%29.svg.png" alt="Apple" class="brand-logo h-12">
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Samsung_Logo_%282020%29.svg/1280px-Samsung_Logo_%282020%29.svg.png" alt="Samsung" class="brand-logo h-10">
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Xiaomi_logo_%282021-%29.svg/1024px-Xiaomi_logo_%282021-%29.svg.png" alt="Xiaomi" class="brand-logo h-10">
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/OnePlus_logo_%282021%29.svg/1024px-OnePlus_logo_%282021%29.svg.png" alt="OnePlus" class="brand-logo h-10">
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Oppo_logo_%282022%29.svg/1024px-Oppo_logo_%282022%29.svg.png" alt="Oppo" class="brand-logo h-10">
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Google_pixel_logo.png/1024px-Google_pixel_logo.png" alt="Google Pixel" class="brand-logo h-10">
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <a href="brands.html" class="inline-block text-purple-600 hover:text-purple-800 font-medium">
+                    View All Brands <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-mobile-alt text-2xl text-purple-400 mr-2"></i>
+                        <h3 class="text-2xl font-bold">Phone<span class="text-purple-400">Hub</span></h3>
+                    </div>
+                    <p class="text-gray-400">Your one-stop destination for premium smartphones and accessories.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="products.html" class="text-gray-400 hover:text-white">Products</a></li>
+                        <li><a href="brands.html" class="text-gray-400 hover:text-white">Brands</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3 text-purple-400"></i>
+                            <span>123 Street, Phnom Penh, Cambodia</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-purple-400"></i>
+                            <span>+855 12 345 678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-purple-400"></i>
+                            <span>info@phonehub.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to get updates on new arrivals and special offers.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-700 text-white px-4 py-2 rounded-l-lg w-full focus:outline-none">
+                        <button class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 PhoneHub. All rights reserved. | Developed by net_nett12</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold">Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-800 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="mb-8">
+                <p id="empty-cart-message" class="text-center text-gray-500 py-8">Your cart is empty</p>
+            </div>
+            
+            <div class="border-t pt-4">
+                <div class="flex justify-between mb-4">
+                    <span class="font-bold">Total:</span>
+                    <span id="cart-total" class="font-bold text-xl">$0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="checkout-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold">Checkout</h3>
+                    <button id="close-checkout" class="text-gray-500 hover:text-gray-800 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="checkout-form">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="first-name">First Name</label>
+                                <input type="text" id="first-name" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="last-name">Last Name</label>
+                                <input type="text" id="last-name" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="email">Email</label>
+                            <input type="email" id="email" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="address">Address</label>
+                            <textarea id="address" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                            Place Order via Telegram
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-detail-modal" class="checkout-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="product-detail-title" class="text-2xl font-bold">Product Details</h3>
+                    <button id="close-product-detail" class="text-gray-500 hover:text-gray-800 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="product-detail-content" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Product details will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="wishlist-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-heart text-red-500 mr-3"></i>
+                        Your Wishlist
+                        <span id="wishlist-modal-count" class="ml-2 bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full">0 items</span>
+                    </h3>
+                    <button id="close-wishlist" class="text-gray-500 hover:text-gray-800 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="wishlist-items" class="flex-grow overflow-y-auto">
+                    <!-- Wishlist items will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-3"></i>
+            <span>Order sent successfully via Telegram!</span>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = "8539705229:AAHcoVDYhU__cJH6D0FRGfeh6vh9Q_1_S4E";
+        const TELEGRAM_CHAT_ID = "1113224105";
+        
+        // Color options for each product with background classes
+        const colorOptions = {
+            "iPhone 14 Pro": [
+                { name: "Space Black", value: "#1D1D1F", code: "space-black", bgClass: "phone-bg-space-black" },
+                { name: "Silver", value: "#F2F2F2", code: "silver", bgClass: "phone-bg-silver" },
+                { name: "Gold", value: "#FAD7BD", code: "gold", bgClass: "phone-bg-gold" },
+                { name: "Deep Purple", value: "#574E6A", code: "deep-purple", bgClass: "phone-bg-deep-purple" }
+            ],
+            "Samsung Galaxy S23 Ultra": [
+                { name: "Phantom Black", value: "#2C2C2C", code: "phantom-black", bgClass: "phone-bg-phantom-black" },
+                { name: "Cream", value: "#F5F5DC", code: "cream", bgClass: "phone-bg-cream" },
+                { name: "Green", value: "#556B2F", code: "green", bgClass: "phone-bg-green" },
+                { name: "Lavender", value: "#967BB6", code: "lavender", bgClass: "phone-bg-lavender" }
+            ],
+            "Google Pixel 7 Pro": [
+                { name: "Obsidian", value: "#1C1C1C", code: "obsidian", bgClass: "phone-bg-obsidian" },
+                { name: "Snow", value: "#F8F8F8", code: "snow", bgClass: "phone-bg-snow" },
+                { name: "Hazel", value: "#8B7355", code: "hazel", bgClass: "phone-bg-hazel" }
+            ],
+            "OnePlus 11": [
+                { name: "Titan Black", value: "#1A1A1A", code: "titan-black", bgClass: "phone-bg-phantom-black" },
+                { name: "Eternal Green", value: "#2E8B57", code: "eternal-green", bgClass: "phone-bg-green" }
+            ],
+            "Xiaomi 13 Pro": [
+                { name: "Ceramic Black", value: "#333333", code: "ceramic-black", bgClass: "phone-bg-space-black" },
+                { name: "Ceramic White", value: "#F0F0F0", code: "ceramic-white", bgClass: "phone-bg-silver" },
+                { name: "Mountain Blue", value: "#4682B4", code: "mountain-blue", bgClass: "phone-bg-default" }
+            ],
+            "Oppo Find X6 Pro": [
+                { name: "Black", value: "#000000", code: "black", bgClass: "phone-bg-space-black" },
+                { name: "Green", value: "#228B22", code: "green", bgClass: "phone-bg-green" },
+                { name: "Brown", value: "#8B4513", code: "brown", bgClass: "phone-bg-hazel" }
+            ],
+            "Vivo X90 Pro": [
+                { name: "Legendary Black", value: "#0A0A0A", code: "legendary-black", bgClass: "phone-bg-space-black" },
+                { name: "Sunset Orange", value: "#FF4500", code: "sunset-orange", bgClass: "phone-bg-default" }
+            ],
+            "Huawei P60 Pro": [
+                { name: "Rococo Pearl", value: "#FFF5EE", code: "rococo-pearl", bgClass: "phone-bg-silver" },
+                { name: "Feather Purple", value: "#9370DB", code: "feather-purple", bgClass: "phone-bg-lavender" },
+                { name: "Emerald Green", value: "#50C878", code: "emerald-green", bgClass: "phone-bg-green" }
+            ],
+            "iPhone 13": [
+                { name: "Midnight", value: "#1D1D1F", code: "midnight", bgClass: "phone-bg-space-black" },
+                { name: "Starlight", value: "#F5F5F7", code: "starlight", bgClass: "phone-bg-silver" },
+                { name: "Blue", value: "#5AC8FA", code: "blue", bgClass: "phone-bg-default" },
+                { name: "Pink", value: "#FFB6C1", code: "pink", bgClass: "phone-bg-default" }
+            ],
+            "Samsung Galaxy Z Flip 4": [
+                { name: "Graphite", value: "#424242", code: "graphite", bgClass: "phone-bg-space-black" },
+                { name: "Bora Purple", value: "#9C27B0", code: "bora-purple", bgClass: "phone-bg-lavender" },
+                { name: "Pink Gold", value: "#E6B0AA", code: "pink-gold", bgClass: "phone-bg-gold" },
+                { name: "Blue", value: "#2196F3", code: "blue", bgClass: "phone-bg-default" }
+            ],
+            "Xiaomi 12T Pro": [
+                { name: "Black", value: "#000000", code: "black", bgClass: "phone-bg-space-black" },
+                { name: "Silver", value: "#C0C0C0", code: "silver", bgClass: "phone-bg-silver" },
+                { name: "Blue", value: "#1E90FF", code: "blue", bgClass: "phone-bg-default" }
+            ],
+            "Oppo Reno 8 Pro": [
+                { name: "Glazed Black", value: "#212121", code: "glazed-black", bgClass: "phone-bg-space-black" },
+                { name: "Glazed Green", value: "#4CAF50", code: "glazed-green", bgClass: "phone-bg-green" },
+                { name: "Sunrise Gold", value: "#FFD700", code: "sunrise-gold", bgClass: "phone-bg-gold" }
+            ]
+        };
+
+        // Product data will be loaded from data.json
+        let products = [];
+
+        // State management
+        let cart = JSON.parse(localStorage.getItem('phonehub-cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('phonehub-wishlist')) || [];
+        let currentProductDetail = null;
+        let selectedColor = null; // To track selected color in product detail
+
+        // DOM Elements
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const featuredProductsContainer = document.getElementById('featured-products');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartCount = document.getElementById('cart-count');
+        const wishlistCount = document.getElementById('wishlist-count');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const checkoutModal = document.getElementById('checkout-modal');
+        const closeCheckoutBtn = document.getElementById('close-checkout');
+        const checkoutForm = document.getElementById('checkout-form');
+        const wishlistBtn = document.getElementById('wishlist-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const productDetailModal = document.getElementById('product-detail-modal');
+        const closeProductDetailBtn = document.getElementById('close-product-detail');
+        const successMessage = document.getElementById('success-message');
+        const wishlistModal = document.getElementById('wishlist-modal');
+        const closeWishlistBtn = document.getElementById('close-wishlist');
+        const wishlistItemsContainer = document.getElementById('wishlist-items');
+        const wishlistModalCount = document.getElementById('wishlist-modal-count');
+
+        // Load products from JSON file
+        async function loadProducts() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                products = data.products;
+                return true;
+            } catch (error) {
+                console.error('Error loading products:', error);
+                products = [];
+                return false;
+            }
+        }
+
+        // Initialize the app
+        async function init() {
+            await loadProducts();
+            renderFeaturedProducts();
+            attachEventListeners();
+            updateCartUI();
+            updateWishlistUI();
+        }
+
+        // Render featured products on home page
+        function renderFeaturedProducts() {
+            featuredProductsContainer.innerHTML = '';
+            
+            // Show first 6 products as featured
+            const featured = products.slice(0, 6);
+            
+            featured.forEach(product => {
+                const isInWishlist = wishlist.some(item => item.id === product.id);
+                
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 h-full flex flex-col';
+                productCard.innerHTML = `
+                    <div class="product-image-container h-64 relative">
+                        <img src="${product.image}" alt="${product.name}" class="product-image w-full h-full p-6">
+                        <button class="absolute top-4 right-4 wish-btn heart-animation ${isInWishlist ? 'active' : ''}" data-id="${product.id}">
+                            <i class="fas fa-heart text-2xl ${isInWishlist ? 'text-red-500' : 'text-white'} drop-shadow-lg"></i>
+                            <div class="heart-pulse"></div>
+                        </button>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="mb-4 flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-gray-800">${product.name}</h3>
+                                <span class="text-purple-600 font-bold text-xl">$${product.price}</span>
+                            </div>
+                            <p class="text-gray-600 mb-2 text-sm font-medium">${product.brand}</p>
+                            <p class="text-gray-500 text-sm line-clamp-2">${product.description}</p>
+                        </div>
+                        <div class="flex space-x-4 mt-auto">
+                            <button class="view-detail-btn flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-4 rounded-lg transition duration-300" data-id="${product.id}">
+                                View Details
+                            </button>
+                            <button class="add-to-cart-btn flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300" data-id="${product.id}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                featuredProductsContainer.appendChild(productCard);
+            });
+            
+            attachProductEventListeners();
+        }
+
+        // Attach event listeners to product buttons
+        function attachProductEventListeners() {
+            // Add to cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+            
+            // Wishlist buttons
+            document.querySelectorAll('.wish-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    
+                    // Trigger heart animation
+                    const heartIcon = this.querySelector('i');
+                    const heartPulse = this.querySelector('.heart-pulse');
+                    
+                    heartIcon.classList.add('animate-heart-beat');
+                    heartPulse.classList.add('active');
+                    
+                    setTimeout(() => {
+                        heartIcon.classList.remove('animate-heart-beat');
+                        heartPulse.classList.remove('active');
+                    }, 500);
+                    
+                    toggleWishlist(productId);
+                });
+            });
+            
+            // View detail buttons
+            document.querySelectorAll('.view-detail-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    showProductDetail(productId);
+                });
+            });
+        }
+
+        // Add to cart function
+        function addToCart(productId, selectedColor = null) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            const existingItemIndex = cart.findIndex(item => item.id === productId && item.selectedColor?.code === selectedColor?.code);
+            
+            if (existingItemIndex > -1) {
+                // If same product with same color already in cart, increase quantity
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    selectedColor: selectedColor
+                });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+            
+            updateCartUI();
+            showNotification(`${product.name} ${selectedColor ? `(${selectedColor.name}) ` : ''}added to cart!`);
+        }
+
+        // Toggle wishlist function
+        function toggleWishlist(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            const index = wishlist.findIndex(item => item.id === productId);
+            
+            if (index > -1) {
+                // Remove from wishlist
+                wishlist.splice(index, 1);
+                showNotification(`${product.name} removed from wishlist`);
+            } else {
+                // Add to wishlist
+                wishlist.push(product);
+                showNotification(`${product.name} added to wishlist!`);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('phonehub-wishlist', JSON.stringify(wishlist));
+            
+            updateWishlistUI();
+            renderFeaturedProducts(); // Re-render to update wishlist heart icons
+        }
+
+        // Show product detail modal
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            currentProductDetail = product;
+            selectedColor = null; // Reset selected color
+            
+            const productDetailTitle = document.getElementById('product-detail-title');
+            const productDetailContent = document.getElementById('product-detail-content');
+            
+            productDetailTitle.textContent = product.name;
+            
+            // Get color options for this product
+            const colors = colorOptions[product.name] || [
+                { name: "Black", value: "#000000", code: "black", bgClass: "phone-bg-space-black" },
+                { name: "White", value: "#FFFFFF", code: "white", bgClass: "phone-bg-silver" },
+                { name: "Blue", value: "#1E90FF", code: "blue", bgClass: "phone-bg-default" }
+            ];
+            
+            // Set initial selected color
+            selectedColor = colors[0];
+            
+            // Check if product is in wishlist
+            const isInWishlist = wishlist.some(item => item.id === productId);
+            
+            productDetailContent.innerHTML = `
+                <div class="product-detail-image-container h-full flex items-center justify-center p-8 ${selectedColor.bgClass || 'phone-bg-default'}">
+                    <img src="${product.image}" alt="${product.name}" class="product-detail-image w-full max-h-96">
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-2xl font-bold">${product.name}</h4>
+                        <button id="wishlist-detail-btn" class="heart-animation text-2xl ${isInWishlist ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}" data-id="${product.id}">
+                            <i class="fas fa-heart"></i>
+                            <div class="heart-pulse"></div>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mb-4">${product.brand}</p>
+                    <p class="text-3xl font-bold text-purple-600 mb-6">$${product.price}</p>
+                    <p class="text-gray-700 mb-6">${product.description}</p>
+                    
+                    <div class="mb-6">
+                        <h5 class="text-lg font-bold mb-3">Available Colors</h5>
+                        <div class="flex flex-wrap gap-4 mb-2">
+                            ${colors.map((color, index) => `
+                                <div class="flex flex-col items-center">
+                                    <div class="color-option relative ${index === 0 ? 'selected' : ''}" 
+                                         style="background-color: ${color.value};"
+                                         data-color-name="${color.name}"
+                                         data-color-value="${color.value}"
+                                         data-color-code="${color.code}"
+                                         data-bg-class="${color.bgClass || 'phone-bg-default'}">
+                                        ${index === 0 ? '<i class="fas fa-check text-xs text-white"></i>' : ''}
+                                    </div>
+                                    <span class="color-name text-xs text-gray-600">${color.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p id="selected-color-text" class="text-sm text-gray-500">Selected: ${colors[0].name}</p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h5 class="text-lg font-bold mb-3">Key Specifications</h5>
+                        <ul class="space-y-2">
+                            ${product.specs.map(spec => `<li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> ${spec}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="flex space-x-4 mt-auto">
+                        <button id="add-to-cart-from-detail" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300">
+                            Add to Cart
+                        </button>
+                        <button id="buy-now-btn" class="flex-1 bg-gray-800 hover:bg-black text-white font-medium py-3 px-4 rounded-lg transition duration-300">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Attach color selection event listeners
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all color options
+                    document.querySelectorAll('.color-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.innerHTML = '';
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    this.innerHTML = '<i class="fas fa-check text-xs text-white"></i>';
+                    
+                    // Update selected color
+                    selectedColor = {
+                        name: this.getAttribute('data-color-name'),
+                        value: this.getAttribute('data-color-value'),
+                        code: this.getAttribute('data-color-code'),
+                        bgClass: this.getAttribute('data-bg-class')
+                    };
+                    
+                    // Update color display
+                    document.getElementById('selected-color-text').textContent = `Selected: ${selectedColor.name}`;
+                    
+                    // Update product image background
+                    const imageContainer = document.querySelector('.product-detail-image-container');
+                    if (imageContainer) {
+                        // Remove all phone background classes
+                        imageContainer.classList.remove(
+                            'phone-bg-space-black', 'phone-bg-silver', 'phone-bg-gold', 'phone-bg-deep-purple',
+                            'phone-bg-phantom-black', 'phone-bg-cream', 'phone-bg-green', 'phone-bg-lavender',
+                            'phone-bg-obsidian', 'phone-bg-snow', 'phone-bg-hazel', 'phone-bg-default'
+                        );
+                        
+                        // Add the new background class
+                        if (selectedColor.bgClass) {
+                            imageContainer.classList.add(selectedColor.bgClass);
+                        } else {
+                            imageContainer.classList.add('phone-bg-default');
+                        }
+                    }
+                });
+            });
+            
+            // Attach wishlist button event listener in detail modal
+            const wishlistDetailBtn = document.getElementById('wishlist-detail-btn');
+            wishlistDetailBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const productId = parseInt(this.getAttribute('data-id'));
+                
+                // Trigger heart animation
+                const heartIcon = this.querySelector('i');
+                const heartPulse = this.querySelector('.heart-pulse');
+                
+                heartIcon.classList.add('animate-heart-beat');
+                heartPulse.classList.add('active');
+                
+                setTimeout(() => {
+                    heartIcon.classList.remove('animate-heart-beat');
+                    heartPulse.classList.remove('active');
+                }, 500);
+                
+                toggleWishlist(productId);
+                
+                // Update the wishlist button in the modal
+                const isInWishlist = wishlist.some(item => item.id === productId);
+                if (isInWishlist) {
+                    this.classList.add('text-red-500');
+                    this.classList.remove('text-gray-400', 'hover:text-red-400');
+                } else {
+                    this.classList.remove('text-red-500');
+                    this.classList.add('text-gray-400', 'hover:text-red-400');
+                }
+            });
+            
+            productDetailModal.classList.remove('hidden');
+            productDetailModal.classList.add('active');
+            
+            // Attach event listeners to buttons in the modal
+            document.getElementById('add-to-cart-from-detail').addEventListener('click', () => {
+                addToCart(productId, selectedColor);
+                productDetailModal.classList.remove('active');
+                productDetailModal.classList.add('hidden');
+                cartSidebar.classList.add('active');
+                cartOverlay.classList.remove('hidden');
+            });
+            
+            document.getElementById('buy-now-btn').addEventListener('click', () => {
+                // If product is not already in cart, add it with selected color
+                if (!cart.find(item => item.id === productId && item.selectedColor?.code === selectedColor?.code)) {
+                    addToCart(productId, selectedColor);
+                }
+                productDetailModal.classList.remove('active');
+                productDetailModal.classList.add('hidden');
+                checkoutModal.classList.add('active');
+            });
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items in sidebar
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartItemsContainer.innerHTML = '';
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                cartItemsContainer.innerHTML = '';
+                
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'flex items-center border-b py-4';
+                    
+                    // Display color if selected
+                    const colorInfo = item.selectedColor ? 
+                        `<p class="text-sm text-gray-500 mt-1">Color: ${item.selectedColor.name}</p>` : '';
+                    
+                    // Get background class for cart item
+                    const bgClass = item.selectedColor?.bgClass || 'phone-bg-default';
+                    
+                    cartItem.innerHTML = `
+                        <div class="w-20 h-20 cart-item-image-container flex-shrink-0 ${bgClass}">
+                            <img src="${item.image}" alt="${item.name}" class="cart-item-image w-full h-full p-2">
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h4 class="font-bold">${item.name}</h4>
+                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                            ${colorInfo}
+                            <div class="flex items-center mt-2">
+                                <button class="decrease-quantity text-gray-500 hover:text-gray-800" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-3">${item.quantity}</span>
+                                <button class="increase-quantity text-gray-500 hover:text-gray-800" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="remove-from-cart ml-4 text-red-500 hover:text-red-700" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold">$${item.price * item.quantity}</span>
+                        </div>
+                    `;
+                    
+                    cartItemsContainer.appendChild(cartItem);
+                });
+                
+                // Attach event listeners to cart item buttons
+                attachCartItemEventListeners();
+            }
+            
+            // Update cart total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `$${total}`;
+        }
+
+        // Update wishlist UI
+        function updateWishlistUI() {
+            const wishlistCountElement = document.getElementById('wishlist-count');
+            wishlistCountElement.textContent = wishlist.length;
+            
+            // Update wishlist modal count
+            if (wishlistModalCount) {
+                wishlistModalCount.textContent = `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'}`;
+            }
+            
+            // Render wishlist items in modal if modal is open
+            if (wishlistModal.classList.contains('active')) {
+                renderWishlistItems();
+            }
+        }
+
+        // Render wishlist items in modal
+        function renderWishlistItems() {
+            wishlistItemsContainer.innerHTML = '';
+            
+            if (wishlist.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-wishlist';
+                emptyState.innerHTML = `
+                    <i class="fas fa-heart"></i>
+                    <h3 class="text-xl font-medium mb-2">Your wishlist is empty</h3>
+                    <p class="text-gray-500 text-center">Add items you love to your wishlist. They will appear here.</p>
+                `;
+                wishlistItemsContainer.appendChild(emptyState);
+                return;
+            }
+            
+            wishlist.forEach((product, index) => {
+                const wishlistItem = document.createElement('div');
+                wishlistItem.className = 'wishlist-item py-4 px-2 flex items-center';
+                wishlistItem.innerHTML = `
+                    <div class="w-16 h-16 cart-item-image-container flex-shrink-0 phone-bg-default mr-4">
+                        <img src="${product.image}" alt="${product.name}" class="cart-item-image w-full h-full p-1">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-gray-800">${product.name}</h4>
+                        <p class="text-gray-600 text-sm">${product.brand}</p>
+                        <p class="text-purple-600 font-bold">$${product.price}</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="add-to-cart-from-wishlist bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm" data-id="${product.id}">
+                            Add to Cart
+                        </button>
+                        <button class="remove-from-wishlist text-red-500 hover:text-red-700 text-lg" data-id="${product.id}" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                wishlistItemsContainer.appendChild(wishlistItem);
+            });
+            
+            // Attach event listeners to wishlist item buttons
+            attachWishlistItemEventListeners();
+        }
+
+        // Attach event listeners to wishlist item buttons
+        function attachWishlistItemEventListeners() {
+            // Add to cart from wishlist buttons
+            document.querySelectorAll('.add-to-cart-from-wishlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                    showNotification('Product added to cart from wishlist!');
+                });
+            });
+            
+            // Remove from wishlist buttons
+            document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const index = parseInt(this.getAttribute('data-index'));
+                    
+                    if (index > -1 && wishlist[index].id === productId) {
+                        const productName = wishlist[index].name;
+                        wishlist.splice(index, 1);
+                        localStorage.setItem('phonehub-wishlist', JSON.stringify(wishlist));
+                        
+                        updateWishlistUI();
+                        renderFeaturedProducts(); // Re-render to update heart icons
+                        showNotification(`${productName} removed from wishlist`);
+                    }
+                });
+            });
+        }
+
+        // Attach event listeners to cart item buttons
+        function attachCartItemEventListeners() {
+            // Increase quantity buttons
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const item = cart.find(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (item) {
+                        item.quantity += 1;
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
+                });
+            });
+            
+            // Decrease quantity buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const itemIndex = cart.findIndex(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (itemIndex > -1) {
+                        if (cart[itemIndex].quantity > 1) {
+                            cart[itemIndex].quantity -= 1;
+                        } else {
+                            cart.splice(itemIndex, 1);
+                        }
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
+                });
+            });
+            
+            // Remove from cart buttons
+            document.querySelectorAll('.remove-from-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const itemIndex = cart.findIndex(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (itemIndex > -1) {
+                        const productName = cart[itemIndex].name;
+                        const colorName = cart[itemIndex].selectedColor?.name ? ` (${cart[itemIndex].selectedColor.name})` : '';
+                        cart.splice(itemIndex, 1);
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                        showNotification(`${productName}${colorName} removed from cart`);
+                    }
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-up';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('animate-fade-out-down');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Send order to Telegram bot
+        async function sendOrderToTelegram(orderData) {
+            const itemsWithColor = orderData.items.map(item => {
+                const colorInfo = item.selectedColor ? ` (Color: ${item.selectedColor.name})` : '';
+                return `- ${item.name}${colorInfo} (x${item.quantity}): $${item.price * item.quantity}`;
+            });
+            
+            const message = `
+🛒 *New Order from PhoneHub Website*
+
+*Customer Information:*
+👤 Name: ${orderData.firstName} ${orderData.lastName}
+📧 Email: ${orderData.email}
+📱 Phone: ${orderData.phone}
+📍 Address: ${orderData.address}
+
+*Order Items:*
+${itemsWithColor.join('\n')}
+
+*Order Total:* $${orderData.total}
+            `;
+            
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const data = await response.json();
+                return data.ok;
+            } catch (error) {
+                console.error('Error sending to Telegram:', error);
+                return false;
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage() {
+            successMessage.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                successMessage.style.transform = 'translateY(100%)';
+            }, 5000);
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            // Cart toggle
+            cartBtn.addEventListener('click', () => {
+                cartSidebar.classList.add('active');
+                cartOverlay.classList.remove('hidden');
+            });
+            
+            closeCartBtn.addEventListener('click', () => {
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+            });
+            
+            cartOverlay.addEventListener('click', () => {
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+            });
+            
+            // Checkout
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification('Your cart is empty!');
+                    return;
+                }
+                
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+                checkoutModal.classList.add('active');
+            });
+            
+            closeCheckoutBtn.addEventListener('click', () => {
+                checkoutModal.classList.remove('active');
+            });
+            
+            // Checkout form submission
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const orderData = {
+                    firstName: document.getElementById('first-name').value,
+                    lastName: document.getElementById('last-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    items: cart,
+                    total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                };
+                
+                // Show loading state
+                const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+                submitBtn.disabled = true;
+                
+                // Send order to Telegram
+                const success = await sendOrderToTelegram(orderData);
+                
+                if (success) {
+                    // Reset form
+                    checkoutForm.reset();
+                    
+                    // Close checkout modal
+                    checkoutModal.classList.remove('active');
+                    
+                    // Clear cart
+                    cart = [];
+                    localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                    updateCartUI();
+                    
+                    // Show success message
+                    showSuccessMessage();
+                    
+                    // Show success notification
+                    showNotification('Order placed successfully! You will receive a confirmation via Telegram.');
+                } else {
+                    showNotification('Failed to send order. Please try again.');
+                }
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+            
+            // Wishlist button in navbar
+            wishlistBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Trigger heart animation on navbar heart icon
+                const heartIcon = wishlistBtn.querySelector('i');
+                const heartPulse = wishlistBtn.querySelector('.heart-pulse');
+                
+                heartIcon.classList.add('animate-heart-beat');
+                heartPulse.classList.add('active');
+                
+                setTimeout(() => {
+                    heartIcon.classList.remove('animate-heart-beat');
+                    heartPulse.classList.remove('active');
+                }, 500);
+                
+                // Show wishlist modal
+                renderWishlistItems();
+                wishlistModal.classList.remove('hidden');
+                wishlistModal.classList.add('active');
+            });
+            
+            // Close wishlist modal
+            closeWishlistBtn.addEventListener('click', () => {
+                wishlistModal.classList.remove('active');
+                wishlistModal.classList.add('hidden');
+            });
+            
+            // Close wishlist modal when clicking outside
+            wishlistModal.addEventListener('click', (e) => {
+                if (e.target === wishlistModal) {
+                    wishlistModal.classList.remove('active');
+                    wishlistModal.classList.add('hidden');
+                }
+            });
+            
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close product detail modal
+            closeProductDetailBtn.addEventListener('click', () => {
+                productDetailModal.classList.remove('active');
+                productDetailModal.classList.add('hidden');
+            });
+            
+            // Close product detail modal when clicking outside
+            productDetailModal.addEventListener('click', (e) => {
+                if (e.target === productDetailModal) {
+                    productDetailModal.classList.remove('active');
+                    productDetailModal.classList.add('hidden');
+                }
+            });
+            
+            // Close checkout modal when clicking outside
+            checkoutModal.addEventListener('click', (e) => {
+                if (e.target === checkoutModal) {
+                    checkoutModal.classList.remove('active');
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Close mobile menu if open
+                        mobileMenu.classList.add('hidden');
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

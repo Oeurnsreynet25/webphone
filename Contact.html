@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneHub - Contact Us</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .contact-hero {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .map-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 300px;
+        }
+        
+        .form-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 136, 204, 0.2);
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Cart and Wishlist Sidebars */
+        .cart-sidebar, .wishlist-modal {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .cart-sidebar.active, .wishlist-modal.active {
+            transform: translateX(0);
+        }
+        
+        /* Heart animation styles from index.html */
+        .wish-btn.active {
+            color: #ef4444;
+        }
+        
+        .heart-animation {
+            position: relative;
+        }
+        
+        .heart-pulse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: currentColor;
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .heart-pulse.active {
+            animation: heart-fill 0.4s ease-out;
+        }
+        
+        @keyframes heart-fill {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-heart-beat {
+            animation: heart-beat 0.5s ease-out;
+        }
+        
+        .animate-heart-fill {
+            animation: heart-fill 0.3s ease-out;
+        }
+        
+        /* Empty states */
+        .empty-cart, .empty-wishlist {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+            color: #9ca3af;
+        }
+        
+        .empty-cart i, .empty-wishlist i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-mobile-alt text-2xl text-purple-600 mr-2"></i>
+                    <a href="index.html" class="text-2xl font-bold text-gray-800">Phone<span class="text-purple-600">Hub</span></a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 font-medium">Home</a>
+                    <a href="products.html" class="text-gray-700 hover:text-purple-600 font-medium">Products</a>
+                    <a href="brands.html" class="text-gray-700 hover:text-purple-600 font-medium">Brands</a>
+                    <a href="about.html" class="text-gray-700 hover:text-purple-600 font-medium">About</a>
+                    <a href="contact.html" class="text-purple-600 font-medium">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <!-- Wishlist Button -->
+                    <button id="wishlist-btn" class="relative text-gray-700 hover:text-red-500 transition-all duration-300">
+                        <div class="heart-animation">
+                            <i class="fas fa-heart text-xl"></i>
+                            <div class="heart-pulse"></div>
+                        </div>
+                        <span id="wishlist-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    
+                    <!-- Cart Button -->
+                    <button id="cart-btn" class="relative text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 font-medium">Home</a>
+                    <a href="products.html" class="text-gray-700 hover:text-purple-600 font-medium">Products</a>
+                    <a href="brands.html" class="text-gray-700 hover:text-purple-600 font-medium">Brands</a>
+                    <a href="about.html" class="text-gray-700 hover:text-purple-600 font-medium">About</a>
+                    <a href="contact.html" class="text-purple-600 font-medium">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="contact-hero text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Get in Touch With PhoneHub</h1>
+                <p class="text-xl mb-8 opacity-90">Have questions about our products or need assistance? We're here to help! Reach out to us through any channel below.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full"><i class="fas fa-comments mr-2"></i>Live Chat</span>
+                    <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full"><i class="fas fa-phone mr-2"></i>Phone Support</span>
+                    <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full"><i class="fab fa-telegram mr-2"></i>Telegram</span>
+                    <span class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full"><i class="fas fa-envelope mr-2"></i>Email</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Phone Support</h3>
+                    <p class="text-gray-600 mb-4">Call us directly for immediate assistance with orders, product inquiries, or technical support.</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-purple-600 mr-3"></i>
+                            <span class="font-medium">+855 12 345 678</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-purple-600 mr-3"></i>
+                            <span class="font-medium">+855 23 456 789</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">Available: 8:00 AM - 8:00 PM (Monday-Saturday)</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Telegram Support</h3>
+                    <p class="text-gray-600 mb-4">Message us on Telegram for quick responses, order tracking, and instant support.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fab fa-telegram text-blue-500 mr-3 text-xl"></i>
+                            <span class="font-medium">@contactPhoneHubbot</span>
+                        </div>
+                        <a href="https://t.me/contactPhoneHubbot" target="_blank" class="inline-block telegram-btn font-medium py-3 px-6 rounded-lg w-full text-center">
+                            <i class="fab fa-telegram mr-2"></i> Message on Telegram
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">Response time: Usually within 15 minutes</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Email & Office</h3>
+                    <p class="text-gray-600 mb-4">Send us an email or visit our physical store for personalized assistance.</p>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-purple-600 mr-3 mt-1"></i>
+                            <div>
+                                <div class="font-medium">General Inquiries</div>
+                                <div class="text-gray-600">info@phonehub.com</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-purple-600 mr-3 mt-1"></i>
+                            <div>
+                                <div class="font-medium">Main Store</div>
+                                <div class="text-gray-600">123 Street, Sangkat Tonle Bassac, Khan Chamkarmon, Phnom Penh, Cambodia</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
+                    <p class="text-gray-600 mb-8">Fill out the form below and we'll get back to you as soon as possible. You can also choose to receive our response via Telegram for faster communication.</p>
+                    
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="contact-name">Full Name *</label>
+                                <input type="text" id="contact-name" class="form-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="contact-phone">Phone Number *</label>
+                                <input type="tel" id="contact-phone" class="form-input" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="contact-email">Email Address *</label>
+                            <input type="email" id="contact-email" class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="contact-subject">Subject *</label>
+                            <select id="contact-subject" class="form-input" required>
+                                <option value="">Select a subject</option>
+                                <option value="product-inquiry">Product Inquiry</option>
+                                <option value="order-support">Order Support</option>
+                                <option value="technical-support">Technical Support</option>
+                                <option value="warranty-claim">Warranty Claim</option>
+                                <option value="business-inquiry">Business Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="contact-message">Message *</label>
+                            <textarea id="contact-message" rows="5" class="form-input" required></textarea>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="contact-telegram" class="h-5 w-5 text-blue-600 rounded">
+                            <label for="contact-telegram" class="ml-3 text-gray-700">
+                                Send response via Telegram (faster response time)
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="contact-newsletter" class="h-5 w-5 text-blue-600 rounded">
+                            <label for="contact-newsletter" class="ml-3 text-gray-700">
+                                Subscribe to our newsletter for updates and promotions
+                            </label>
+                        </div>
+                        
+                        <div id="contact-success" class="success-message hidden">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle mr-3 text-xl"></i>
+                                <span>Your message has been sent successfully! We'll get back to you soon.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+                                Send Message
+                            </button>
+                            <button type="button" id="telegram-direct" class="flex-1 telegram-btn font-medium py-3 px-6 rounded-lg transition duration-300">
+                                <i class="fab fa-telegram mr-2"></i> Contact via Telegram
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Visit Our Store</h2>
+                    <p class="text-gray-600 mb-6">Come visit our flagship store in Phnom Penh to experience our products firsthand and get expert advice from our team.</p>
+                    
+                    <div class="map-container mb-8">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.7726438315115!2d104.9170083153376!3d11.568864047328536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109519d48d5e6c9%3A0x7b6d7c1b3b0e0b1f!2sPhnom%20Penh!5e0!3m2!1sen!2skh!4v1652345678901!5m2!1sen!2skh" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">Store Hours</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Monday - Friday</span>
+                                <span class="font-medium">8:00 AM - 8:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Saturday</span>
+                                <span class="font-medium">9:00 AM - 7:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Sunday</span>
+                                <span class="font-medium">10:00 AM - 5:00 PM</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-6 border-t">
+                            <h4 class="font-bold mb-3">Services Available In-Store:</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Hands-on product demos</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Technical consultations</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Same-day purchases</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Warranty claims processing</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-question w-full text-left p-6 font-bold text-lg flex justify-between items-center hover:bg-gray-50">
+                        <span>What payment methods do you accept?</span>
+                        <i class="fas fa-chevron-down text-purple-600"></i>
+                    </button>
+                    <div class="faq-answer p-6 border-t hidden">
+                        <p class="text-gray-600">We accept cash, credit/debit cards (Visa, MasterCard), bank transfers, and popular mobile payment platforms like ABA Pay, PiPay, and Wing. We also offer installment plans through selected partners.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-question w-full text-left p-6 font-bold text-lg flex justify-between items-center hover:bg-gray-50">
+                        <span>Do you offer warranty on your products?</span>
+                        <i class="fas fa-chevron-down text-purple-600"></i>
+                    </button>
+                    <div class="faq-answer p-6 border-t hidden">
+                        <p class="text-gray-600">Yes, all our products come with official manufacturer warranty. The warranty period varies by brand (typically 12-24 months). We also provide our own 30-day return policy for any defective products.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-question w-full text-left p-6 font-bold text-lg flex justify-between items-center hover:bg-gray-50">
+                        <span>How long does delivery take?</span>
+                        <i class="fas fa-chevron-down text-purple-600"></i>
+                    </button>
+                    <div class="faq-answer p-6 border-t hidden">
+                        <p class="text-gray-600">For Phnom Penh orders, we offer same-day delivery for orders placed before 3 PM. For provincial orders, delivery typically takes 2-3 business days via our trusted logistics partners.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <button class="faq-question w-full text-left p-6 font-bold text-lg flex justify-between items-center hover:bg-gray-50">
+                        <span>Can I trade in my old phone?</span>
+                        <i class="fas fa-chevron-down text-purple-600"></i>
+                    </button>
+                    <div class="faq-answer p-6 border-t hidden">
+                        <p class="text-gray-600">Yes! We offer trade-in programs for most smartphone brands. Bring your old device to our store for a free valuation, or contact us via Telegram with details about your device for an estimated trade-in value.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-mobile-alt text-2xl text-purple-400 mr-2"></i>
+                        <h3 class="text-2xl font-bold">Phone<span class="text-purple-400">Hub</span></h3>
+                    </div>
+                    <p class="text-gray-400">Your one-stop destination for premium smartphones and accessories.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="products.html" class="text-gray-400 hover:text-white">Products</a></li>
+                        <li><a href="brands.html" class="text-gray-400 hover:text-white">Brands</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3 text-purple-400"></i>
+                            <span>123 Street, Phnom Penh, Cambodia</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-purple-400"></i>
+                            <span>+855 12 345 678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-purple-400"></i>
+                            <span>info@phonehub.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 mb-6">
+                        <a href="https://t.me/contactPhoneHubbot" target="_blank" class="bg-blue-500 hover:bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="bg-blue-700 hover:bg-blue-800 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-pink-500 hover:bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-blue-400 hover:bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400 mb-4">Follow us for latest updates and promotions</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 PhoneHub. All rights reserved. | Developed by net_nett12</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar (same as index.html) -->
+    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold">Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-800 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="mb-8">
+                <div id="empty-cart-message" class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3 class="text-xl font-medium mb-2">Your cart is empty</h3>
+                    <p class="text-gray-500 text-center">Add items to your cart and they will appear here.</p>
+                </div>
+            </div>
+            
+            <div class="border-t pt-4">
+                <div class="flex justify-between mb-4">
+                    <span class="font-bold">Total:</span>
+                    <span id="cart-total" class="font-bold text-xl">$0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Wishlist Modal (same as index.html) -->
+    <div id="wishlist-modal" class="wishlist-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-heart text-red-500 mr-3"></i>
+                        Your Wishlist
+                        <span id="wishlist-modal-count" class="ml-2 bg-red-100 text-red-600 text-sm font-medium px-2 py-1 rounded-full">0 items</span>
+                    </h3>
+                    <button id="close-wishlist" class="text-gray-500 hover:text-gray-800 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="wishlist-items" class="flex-grow overflow-y-auto">
+                    <div class="empty-wishlist">
+                        <i class="fas fa-heart"></i>
+                        <h3 class="text-xl font-medium mb-2">Your wishlist is empty</h3>
+                        <p class="text-gray-500 text-center">Add items you love to your wishlist. They will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-3"></i>
+            <span>Message sent successfully!</span>
+        </div>
+    </div>
+
+    <!-- JavaScript for Contact Page -->
+    <script>
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = "8597388093:AAFKbUAkMjYo_HUjenrTqSnp3nVdch2_B5g";
+        const TELEGRAM_CHAT_ID = "1113224105";
+        
+        // State management
+        let cart = JSON.parse(localStorage.getItem('phonehub-cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('phonehub-wishlist')) || [];
+        
+        // DOM Elements
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartCount = document.getElementById('cart-count');
+        const wishlistCount = document.getElementById('wishlist-count');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const wishlistBtn = document.getElementById('wishlist-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const successMessage = document.getElementById('success-message');
+        const wishlistModal = document.getElementById('wishlist-modal');
+        const closeWishlistBtn = document.getElementById('close-wishlist');
+        const wishlistItemsContainer = document.getElementById('wishlist-items');
+        const wishlistModalCount = document.getElementById('wishlist-modal-count');
+
+        // Update cart UI
+        function updateCartUI() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items in sidebar if sidebar is open
+            if (cartSidebar.classList.contains('active')) {
+                if (cart.length === 0) {
+                    emptyCartMessage.style.display = 'flex';
+                    cartItemsContainer.innerHTML = '';
+                    cartItemsContainer.appendChild(emptyCartMessage);
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                    cartItemsContainer.innerHTML = '';
+                    
+                    cart.forEach(item => {
+                        const cartItem = document.createElement('div');
+                        cartItem.className = 'flex items-center border-b py-4';
+                        
+                        // Display color if selected
+                        const colorInfo = item.selectedColor ? 
+                            `<p class="text-sm text-gray-500 mt-1">Color: ${item.selectedColor.name}</p>` : '';
+                        
+                        cartItem.innerHTML = `
+                            <div class="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h4 class="font-bold">${item.name}</h4>
+                                <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                                ${colorInfo}
+                                <div class="flex items-center mt-2">
+                                    <button class="decrease-quantity text-gray-500 hover:text-gray-800" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="mx-3">${item.quantity}</span>
+                                    <button class="increase-quantity text-gray-500 hover:text-gray-800" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="remove-from-cart ml-4 text-red-500 hover:text-red-700" data-id="${item.id}" data-color="${item.selectedColor?.code || ''}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-bold">$${item.price * item.quantity}</span>
+                            </div>
+                        `;
+                        
+                        cartItemsContainer.appendChild(cartItem);
+                    });
+                    
+                    // Attach event listeners to cart item buttons
+                    attachCartItemEventListeners();
+                }
+                
+                // Update cart total
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = `$${total}`;
+            }
+        }
+
+        // Update wishlist UI
+        function updateWishlistUI() {
+            const wishlistCountElement = document.getElementById('wishlist-count');
+            wishlistCountElement.textContent = wishlist.length;
+            
+            // Update wishlist modal count
+            if (wishlistModalCount) {
+                wishlistModalCount.textContent = `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'}`;
+            }
+            
+            // Render wishlist items in modal if modal is open
+            if (wishlistModal.classList.contains('active')) {
+                renderWishlistItems();
+            }
+        }
+
+        // Render wishlist items in modal
+        function renderWishlistItems() {
+            wishlistItemsContainer.innerHTML = '';
+            
+            if (wishlist.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-wishlist';
+                emptyState.innerHTML = `
+                    <i class="fas fa-heart"></i>
+                    <h3 class="text-xl font-medium mb-2">Your wishlist is empty</h3>
+                    <p class="text-gray-500 text-center">Add items you love to your wishlist. They will appear here.</p>
+                `;
+                wishlistItemsContainer.appendChild(emptyState);
+                return;
+            }
+            
+            // For contact page, we don't have product data loaded, so we show basic info
+            wishlist.forEach((product, index) => {
+                const wishlistItem = document.createElement('div');
+                wishlistItem.className = 'wishlist-item py-4 px-2 flex items-center border-b';
+                wishlistItem.innerHTML = `
+                    <div class="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center mr-4">
+                        <img src="${product.image}" alt="${product.name}" class="w-12 h-12 object-contain">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-gray-800">${product.name}</h4>
+                        <p class="text-gray-600 text-sm">${product.brand}</p>
+                        <p class="text-purple-600 font-bold">$${product.price}</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="remove-from-wishlist text-red-500 hover:text-red-700 text-lg" data-id="${product.id}" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                wishlistItemsContainer.appendChild(wishlistItem);
+            });
+            
+            // Attach event listeners to wishlist item buttons
+            attachWishlistItemEventListeners();
+        }
+
+        // Attach event listeners to wishlist item buttons
+        function attachWishlistItemEventListeners() {
+            // Remove from wishlist buttons
+            document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const index = parseInt(this.getAttribute('data-index'));
+                    
+                    if (index > -1 && wishlist[index].id === productId) {
+                        const productName = wishlist[index].name;
+                        wishlist.splice(index, 1);
+                        localStorage.setItem('phonehub-wishlist', JSON.stringify(wishlist));
+                        
+                        updateWishlistUI();
+                        showNotification(`${productName} removed from wishlist`);
+                    }
+                });
+            });
+        }
+
+        // Attach event listeners to cart item buttons
+        function attachCartItemEventListeners() {
+            // Increase quantity buttons
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const item = cart.find(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (item) {
+                        item.quantity += 1;
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
+                });
+            });
+            
+            // Decrease quantity buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const itemIndex = cart.findIndex(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (itemIndex > -1) {
+                        if (cart[itemIndex].quantity > 1) {
+                            cart[itemIndex].quantity -= 1;
+                        } else {
+                            cart.splice(itemIndex, 1);
+                        }
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
+                });
+            });
+            
+            // Remove from cart buttons
+            document.querySelectorAll('.remove-from-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const colorCode = this.getAttribute('data-color');
+                    
+                    const itemIndex = cart.findIndex(item => 
+                        item.id === productId && 
+                        (!item.selectedColor || item.selectedColor.code === colorCode)
+                    );
+                    
+                    if (itemIndex > -1) {
+                        const productName = cart[itemIndex].name;
+                        const colorName = cart[itemIndex].selectedColor?.name ? ` (${cart[itemIndex].selectedColor.name})` : '';
+                        cart.splice(itemIndex, 1);
+                        localStorage.setItem('phonehub-cart', JSON.stringify(cart));
+                        updateCartUI();
+                        showNotification(`${productName}${colorName} removed from cart`);
+                    }
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-up';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('animate-fade-out-down');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Send contact form to Telegram
+        async function sendContactToTelegram(formData) {
+            const telegramOption = document.getElementById('contact-telegram').checked ? 'Yes' : 'No';
+            const newsletterOption = document.getElementById('contact-newsletter').checked ? 'Yes' : 'No';
+            
+            const message = `
+📨 *New Contact Form Submission - PhoneHub Website*
+
+*Contact Information:*
+👤 Name: ${formData.name}
+📧 Email: ${formData.email}
+📱 Phone: ${formData.phone}
+📋 Subject: ${formData.subject}
+
+*Message:*
+${formData.message}
+
+*Preferences:*
+📱 Response via Telegram: ${telegramOption}
+📰 Newsletter Subscription: ${newsletterOption}
+
+*Timestamp:* ${new Date().toLocaleString()}
+            `;
+            
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const data = await response.json();
+                return data.ok;
+            } catch (error) {
+                console.error('Error sending to Telegram:', error);
+                return false;
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage() {
+            successMessage.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                successMessage.style.transform = 'translateY(100%)';
+            }, 5000);
+        }
+
+        // Update UI on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartUI();
+            updateWishlistUI();
+            attachEventListeners();
+            setupFAQs();
+        });
+        
+        function setupFAQs() {
+            // FAQ toggle functionality
+            document.querySelectorAll('.faq-question').forEach(button => {
+                button.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Toggle the answer
+                    answer.classList.toggle('hidden');
+                    
+                    // Rotate the icon
+                    if (answer.classList.contains('hidden')) {
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                    
+                    // Close other FAQs (optional)
+                    document.querySelectorAll('.faq-question').forEach(otherButton => {
+                        if (otherButton !== this) {
+                            const otherAnswer = otherButton.nextElementSibling;
+                            const otherIcon = otherButton.querySelector('i');
+                            otherAnswer.classList.add('hidden');
+                            otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Attach event listeners
+        function attachEventListeners() {
+            // Cart toggle
+            cartBtn.addEventListener('click', () => {
+                updateCartUI(); // Refresh cart data before showing
+                cartSidebar.classList.add('active');
+                cartOverlay.classList.remove('hidden');
+            });
+            
+            closeCartBtn.addEventListener('click', () => {
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+            });
+            
+            cartOverlay.addEventListener('click', () => {
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+            });
+            
+            // Checkout button in cart
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification('Your cart is empty!');
+                    return;
+                }
+                
+                cartSidebar.classList.remove('active');
+                cartOverlay.classList.add('hidden');
+                showNotification('Please visit the Products page to complete your checkout');
+            });
+            
+            // Wishlist button
+            wishlistBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Trigger heart animation on navbar heart icon
+                const heartIcon = wishlistBtn.querySelector('i');
+                const heartPulse = wishlistBtn.querySelector('.heart-pulse');
+                
+                heartIcon.classList.add('animate-heart-beat');
+                heartPulse.classList.add('active');
+                
+                setTimeout(() => {
+                    heartIcon.classList.remove('animate-heart-beat');
+                    heartPulse.classList.remove('active');
+                }, 500);
+                
+                // Show wishlist modal
+                renderWishlistItems();
+                wishlistModal.classList.remove('hidden');
+                wishlistModal.classList.add('active');
+            });
+            
+            // Close wishlist modal
+            closeWishlistBtn.addEventListener('click', () => {
+                wishlistModal.classList.remove('active');
+                wishlistModal.classList.add('hidden');
+            });
+            
+            // Close wishlist modal when clicking outside
+            wishlistModal.addEventListener('click', (e) => {
+                if (e.target === wishlistModal) {
+                    wishlistModal.classList.remove('active');
+                    wishlistModal.classList.add('hidden');
+                }
+            });
+            
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Contact form submission
+            document.getElementById('contact-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    name: document.getElementById('contact-name').value,
+                    email: document.getElementById('contact-email').value,
+                    phone: document.getElementById('contact-phone').value,
+                    subject: document.getElementById('contact-subject').value,
+                    message: document.getElementById('contact-message').value
+                };
+                
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+                submitBtn.disabled = true;
+                
+                // Send to Telegram
+                const success = await sendContactToTelegram(formData);
+                
+                if (success) {
+                    // Show success message
+                    document.getElementById('contact-success').style.display = 'block';
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Scroll to success message
+                    document.getElementById('contact-success').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('contact-success').style.display = 'none';
+                    }, 5000);
+                    
+                    // If user requested Telegram response, open Telegram
+                    if (document.getElementById('contact-telegram').checked) {
+                        setTimeout(() => {
+                            window.open('https://t.me/contactPhoneHubbot', '_blank');
+                        }, 1000);
+                    }
+                } else {
+                    alert('Failed to send message. Please try again or contact us directly via Telegram.');
+                }
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+            
+            // Direct Telegram button
+            document.getElementById('telegram-direct').addEventListener('click', function() {
+                window.open('https://t.me/contactPhoneHubbot', '_blank');
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Close mobile menu if open
+                        mobileMenu.classList.add('hidden');
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

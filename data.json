@@ -1,0 +1,124 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 14 Pro",
+      "brand": "Apple",
+      "category": "apple",
+      "price": 999,
+      "image": "https://buy.gazelle.com/cdn/shop/files/iPhone_14_Pro_Max_-_Gold_-_Overlap_Trans-cropped.jpg?v=1757425866&width=1946",
+      "description": "The latest iPhone with Dynamic Island, A16 Bionic chip, and advanced camera system.",
+      "specs": ["6.1-inch Super Retina XDR display", "A16 Bionic chip", "48MP Main camera", "Always-On display"]
+    },
+    {
+      "id": 2,
+      "name": "Samsung Galaxy S23 Ultra",
+      "brand": "Samsung",
+      "category": "samsung",
+      "price": 1199,
+      "image": "https://www.phonemart.ng/wp-content/uploads/2023/04/images-56.jpeg.webp",
+      "description": "Samsung's flagship with S Pen, 200MP camera, and Snapdragon 8 Gen 2 processor.",
+      "specs": ["6.8-inch Dynamic AMOLED 2X", "Snapdragon 8 Gen 2", "200MP Wide-angle Camera", "S Pen included"]
+    },
+    {
+      "id": 3,
+      "name": "Google Pixel 7 Pro",
+      "brand": "Google",
+      "category": "google",
+      "price": 899,
+      "image": "https://m.media-amazon.com/images/I/51OFxuD1GgL._AC_UF1000,1000_QL80_.jpg",
+      "description": "Google's flagship with Tensor G2 chip, advanced AI features, and exceptional camera.",
+      "specs": ["6.7-inch QHD+ OLED", "Google Tensor G2", "Triple rear camera system", "Magic Eraser feature"]
+    },
+    {
+      "id": 4,
+      "name": "OnePlus 11",
+      "brand": "OnePlus",
+      "category": "oneplus",
+      "price": 699,
+      "image": "https://assets-cdn.vtenh.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBeU5OQ0E9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--f1d3ed4bd0c06202ddd9316991a997bfbce04544/one-plus-11-black.jpg?locale=en",
+      "description": "Flagship killer with Hasselblad camera, Snapdragon 8 Gen 2, and 100W fast charging.",
+      "specs": ["6.7-inch Fluid AMOLED", "Snapdragon 8 Gen 2", "Hasselblad camera", "100W SUPERVOOC charging"]
+    },
+    {
+      "id": 5,
+      "name": "Xiaomi 13 Pro",
+      "brand": "Xiaomi",
+      "category": "xiaomi",
+      "price": 799,
+      "image": "https://static.alaneesqatar.qa/2016/01/Xiaomi-Redmi-Note-13-Pro-12GB-512GB-Midnight-Black-2_7LlvP92AL.png",
+      "description": "Leica co-engineered camera, Snapdragon 8 Gen 2, and 120W HyperCharge.",
+      "specs": ["6.73-inch AMOLED", "Snapdragon 8 Gen 2", "Leica professional optics", "120W HyperCharge"]
+    },
+    {
+      "id": 6,
+      "name": "Oppo Find X6 Pro",
+      "brand": "Oppo",
+      "category": "oppo",
+      "price": 749,
+      "image": "https://www.phoneplacekenya.com/wp-content/uploads/2022/09/Oppo-Find-X6-Pro-b.jpg",
+      "description": "Flagship with MariSilicon X imaging chip, Hasselblad camera, and 100W charging.",
+      "specs": ["6.82-inch AMOLED", "Snapdragon 8 Gen 2", "Hasselblad Camera", "100W SuperVOOC"]
+    },
+    {
+      "id": 7,
+      "name": "Vivo X90 Pro",
+      "brand": "Vivo",
+      "category": "vivo",
+      "price": 899,
+      "image": "https://fdn2.gsmarena.com/vv/bigpic/vivo-x90-pro.jpg",
+      "description": "Vivo's flagship with Zeiss optics and powerful performance.",
+      "specs": ["6.78-inch AMOLED", "MediaTek Dimensity 9200", "Zeiss optics", "120W FlashCharge"]
+    },
+    {
+      "id": 8,
+      "name": "Huawei P60 Pro",
+      "brand": "Huawei",
+      "category": "huawei",
+      "price": 1099,
+      "image": "https://www.dxomark.com/wp-content/uploads/medias/post-147160/Huawei-P60-Pro_featured-image-packshot-review-Recovered.jpg",
+      "description": "Huawei's photography flagship with advanced camera technology.",
+      "specs": ["6.67-inch OLED", "Snapdragon 8+ Gen 1", "XMAGE Camera", "88W SuperCharge"]
+    },
+    {
+      "id": 9,
+      "name": "iPhone 13",
+      "brand": "Apple",
+      "category": "apple",
+      "price": 699,
+      "image": "https://m.media-amazon.com/images/I/7199VOAdkRL.jpg",
+      "description": "Previous generation iPhone with excellent performance.",
+      "specs": ["6.1-inch Super Retina XDR", "A15 Bionic chip", "Dual 12MP camera system", "Ceramic Shield"]
+    },
+    {
+      "id": 10,
+      "name": "Samsung Galaxy Z Flip 4",
+      "brand": "Samsung",
+      "category": "samsung",
+      "price": 999,
+      "image": "https://web.ribamundotecnologia.es/image/cache/catalog/products/a148ae869da458536e549b8b371d1184dcc9ac36_0-320x320.jpg",
+      "description": "Foldable smartphone with compact design.",
+      "specs": ["6.7-inch Foldable Dynamic AMOLED", "Snapdragon 8+ Gen 1", "Dual 12MP cameras", "Flex mode"]
+    },
+    {
+      "id": 11,
+      "name": "Xiaomi 12T Pro",
+      "brand": "Xiaomi",
+      "category": "xiaomi",
+      "price": 749,
+      "image": "https://www.dxomark.com/wp-content/uploads/medias/post-130950/Xiaomi-12T-Pro_featured-image-packshot-review.jpg",
+      "description": "High-performance smartphone with 200MP camera.",
+      "specs": ["6.67-inch AMOLED", "Snapdragon 8+ Gen 1", "200MP main camera", "120W HyperCharge"]
+    },
+    {
+      "id": 12,
+      "name": "Oppo Reno 8 Pro",
+      "brand": "Oppo",
+      "category": "oppo",
+      "price": 599,
+      "image": "https://m.media-amazon.com/images/I/51VnR0oRHvL._AC_UF1000,1000_QL80_.jpg",
+      "description": "Sleek design with powerful camera features.",
+      "specs": ["6.7-inch AMOLED", "MediaTek Dimensity 8100", "MariSilicon X NPU", "80W SuperVOOC"]
+    }
+  ]
+}
