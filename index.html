@@ -283,6 +283,58 @@
         .heart-pulse.active {
             animation: heart-fill 0.4s ease-out;
         }
+        
+        /* Mobile Responsive Styles for Product Detail Modal */
+        @media (max-width: 768px) {
+            #product-detail-modal > div {
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            #product-detail-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .product-detail-image-container {
+                height: 300px;
+                max-height: 40vh;
+                padding: 1.5rem;
+            }
+            
+            .product-detail-image {
+                max-height: 250px;
+            }
+            
+            /* Fix for color options on mobile */
+            .color-option {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .color-name {
+                font-size: 0.7rem;
+            }
+            
+            /* Better button sizing on mobile */
+            #add-to-cart-from-detail,
+            #buy-now-btn {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Add smooth scrolling for the modal content on mobile */
+        #product-detail-modal > div {
+            transition: all 0.3s ease;
+        }
+        
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -922,24 +974,24 @@
             const isInWishlist = wishlist.some(item => item.id === productId);
             
             productDetailContent.innerHTML = `
-                <div class="product-detail-image-container h-full flex items-center justify-center p-8 ${selectedColor.bgClass || 'phone-bg-default'}">
-                    <img src="${product.image}" alt="${product.name}" class="product-detail-image w-full max-h-96">
+                <div class="product-detail-image-container h-64 md:h-full flex items-center justify-center p-4 md:p-8 ${selectedColor.bgClass || 'phone-bg-default'}">
+                    <img src="${product.image}" alt="${product.name}" class="product-detail-image w-full max-h-64 md:max-h-96">
                 </div>
                 <div class="flex flex-col">
                     <div class="flex justify-between items-start mb-2">
-                        <h4 class="text-2xl font-bold">${product.name}</h4>
-                        <button id="wishlist-detail-btn" class="heart-animation text-2xl ${isInWishlist ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}" data-id="${product.id}">
+                        <h4 class="text-xl md:text-2xl font-bold">${product.name}</h4>
+                        <button id="wishlist-detail-btn" class="heart-animation text-xl md:text-2xl ${isInWishlist ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}" data-id="${product.id}">
                             <i class="fas fa-heart"></i>
                             <div class="heart-pulse"></div>
                         </button>
                     </div>
-                    <p class="text-gray-600 mb-4">${product.brand}</p>
-                    <p class="text-3xl font-bold text-purple-600 mb-6">$${product.price}</p>
-                    <p class="text-gray-700 mb-6">${product.description}</p>
+                    <p class="text-gray-600 mb-3 md:mb-4">${product.brand}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-purple-600 mb-4 md:mb-6">$${product.price}</p>
+                    <p class="text-gray-700 mb-4 md:mb-6 text-sm md:text-base">${product.description}</p>
                     
-                    <div class="mb-6">
-                        <h5 class="text-lg font-bold mb-3">Available Colors</h5>
-                        <div class="flex flex-wrap gap-4 mb-2">
+                    <div class="mb-4 md:mb-6">
+                        <h5 class="text-base md:text-lg font-bold mb-2 md:mb-3">Available Colors</h5>
+                        <div class="flex flex-wrap gap-3 md:gap-4 mb-2">
                             ${colors.map((color, index) => `
                                 <div class="flex flex-col items-center">
                                     <div class="color-option relative ${index === 0 ? 'selected' : ''}" 
@@ -954,17 +1006,17 @@
                                 </div>
                             `).join('')}
                         </div>
-                        <p id="selected-color-text" class="text-sm text-gray-500">Selected: ${colors[0].name}</p>
+                        <p id="selected-color-text" class="text-xs md:text-sm text-gray-500">Selected: ${colors[0].name}</p>
                     </div>
                     
-                    <div class="mb-8">
-                        <h5 class="text-lg font-bold mb-3">Key Specifications</h5>
-                        <ul class="space-y-2">
-                            ${product.specs.map(spec => `<li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> ${spec}</li>`).join('')}
+                    <div class="mb-6 md:mb-8">
+                        <h5 class="text-base md:text-lg font-bold mb-2 md:mb-3">Key Specifications</h5>
+                        <ul class="space-y-1 md:space-y-2">
+                            ${product.specs.map(spec => `<li class="flex items-center text-sm md:text-base"><i class="fas fa-check text-green-500 mr-2 md:mr-3 text-xs md:text-sm"></i> ${spec}</li>`).join('')}
                         </ul>
                     </div>
                     
-                    <div class="flex space-x-4 mt-auto">
+                    <div class="flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0 mt-auto">
                         <button id="add-to-cart-from-detail" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300">
                             Add to Cart
                         </button>
@@ -1055,11 +1107,22 @@
             productDetailModal.classList.remove('hidden');
             productDetailModal.classList.add('active');
             
+            // Prevent body scroll when modal is open on mobile
+            document.body.classList.add('modal-open');
+            
+            // Scroll to top of modal on mobile
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    document.querySelector('#product-detail-modal > div').scrollTop = 0;
+                }, 50);
+            }
+            
             // Attach event listeners to buttons in the modal
             document.getElementById('add-to-cart-from-detail').addEventListener('click', () => {
                 addToCart(productId, selectedColor);
                 productDetailModal.classList.remove('active');
                 productDetailModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
                 cartSidebar.classList.add('active');
                 cartOverlay.classList.remove('hidden');
             });
@@ -1071,6 +1134,7 @@
                 }
                 productDetailModal.classList.remove('active');
                 productDetailModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
                 checkoutModal.classList.add('active');
             });
         }
@@ -1374,16 +1438,19 @@ ${itemsWithColor.join('\n')}
             cartBtn.addEventListener('click', () => {
                 cartSidebar.classList.add('active');
                 cartOverlay.classList.remove('hidden');
+                document.body.classList.add('modal-open');
             });
             
             closeCartBtn.addEventListener('click', () => {
                 cartSidebar.classList.remove('active');
                 cartOverlay.classList.add('hidden');
+                document.body.classList.remove('modal-open');
             });
             
             cartOverlay.addEventListener('click', () => {
                 cartSidebar.classList.remove('active');
                 cartOverlay.classList.add('hidden');
+                document.body.classList.remove('modal-open');
             });
             
             // Checkout
@@ -1395,11 +1462,14 @@ ${itemsWithColor.join('\n')}
                 
                 cartSidebar.classList.remove('active');
                 cartOverlay.classList.add('hidden');
+                document.body.classList.remove('modal-open');
                 checkoutModal.classList.add('active');
+                document.body.classList.add('modal-open');
             });
             
             closeCheckoutBtn.addEventListener('click', () => {
                 checkoutModal.classList.remove('active');
+                document.body.classList.remove('modal-open');
             });
             
             // Checkout form submission
@@ -1431,6 +1501,7 @@ ${itemsWithColor.join('\n')}
                     
                     // Close checkout modal
                     checkoutModal.classList.remove('active');
+                    document.body.classList.remove('modal-open');
                     
                     // Clear cart
                     cart = [];
@@ -1472,12 +1543,14 @@ ${itemsWithColor.join('\n')}
                 renderWishlistItems();
                 wishlistModal.classList.remove('hidden');
                 wishlistModal.classList.add('active');
+                document.body.classList.add('modal-open');
             });
             
             // Close wishlist modal
             closeWishlistBtn.addEventListener('click', () => {
                 wishlistModal.classList.remove('active');
                 wishlistModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
             });
             
             // Close wishlist modal when clicking outside
@@ -1485,6 +1558,7 @@ ${itemsWithColor.join('\n')}
                 if (e.target === wishlistModal) {
                     wishlistModal.classList.remove('active');
                     wishlistModal.classList.add('hidden');
+                    document.body.classList.remove('modal-open');
                 }
             });
             
@@ -1497,6 +1571,7 @@ ${itemsWithColor.join('\n')}
             closeProductDetailBtn.addEventListener('click', () => {
                 productDetailModal.classList.remove('active');
                 productDetailModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
             });
             
             // Close product detail modal when clicking outside
@@ -1504,6 +1579,7 @@ ${itemsWithColor.join('\n')}
                 if (e.target === productDetailModal) {
                     productDetailModal.classList.remove('active');
                     productDetailModal.classList.add('hidden');
+                    document.body.classList.remove('modal-open');
                 }
             });
             
@@ -1511,6 +1587,7 @@ ${itemsWithColor.join('\n')}
             checkoutModal.addEventListener('click', (e) => {
                 if (e.target === checkoutModal) {
                     checkoutModal.classList.remove('active');
+                    document.body.classList.remove('modal-open');
                 }
             });
             
